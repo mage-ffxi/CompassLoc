@@ -33,3 +33,8 @@ The native hold/release backend has been tested on Phoenix-xi and HorizonXI. Thi
 ## Memory changes and credit
 
 CompassLoc changes the argument-load bytes at **setter +9..+13**, published through an eight-byte exchange at **+8..+15**. These native setters write only the compass object's **X WORD at +0x28** and **Y WORD at +0x2A**. Function/global locations are found through guarded signatures, and original instructions are restored on disable/unload. Thanks to Ashita's [mapdot addon](https://github.com/AshitaXI/Ashita-v4beta/blob/4171c74c8ddb2ca2a31654f199e6c1cee40d7256/addons/mapdot/mapdot.lua) for the initial compass memory fingerprint.
+
+
+## Screenshot of dialog
+
+![CompassLoc.png](CompassLoc.png)
