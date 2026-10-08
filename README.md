@@ -1,3 +1,7 @@
+# WARNING!
+### This addon is currently awaiting approval by  Phoenix admins. Do NOT use it yet unless you are willing to risk your account.
+
+
 # CompassLoc
 
 An Ashita v4 addon by **Mage** that repositions the original FFXI compass and clock. Drag the configuration control to choose a position; closing it keeps the native assembly there, even when chat height changes. Positions and enabled state are saved per character.
