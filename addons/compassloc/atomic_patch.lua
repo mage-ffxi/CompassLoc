@@ -30,6 +30,7 @@ function M.swap(address, expected, replacement)
         address % 8 == 0 and #expected == 8 and #replacement == 8,
         'Patch must be aligned and eight bytes'
     )
+
     -- Caller native.lua supplies only discovered X/Y setter +8 addresses.
     -- This helper does not discover or select game memory by itself.
     -- These buffers and outputs are allocated before changing page protection.
@@ -38,12 +39,14 @@ function M.swap(address, expected, replacement)
     ffi.copy(new_word, replacement, 8)
     local old_protection, ignored = ffi.new('uint32_t[1]'), ffi.new('uint32_t[1]')
     local destination = ffi.cast('volatile int64_t*', address)
+
     -- 0x40 = PAGE_EXECUTE_READWRITE. Windows adjusts the containing page
     -- protection; the exchange itself writes exactly eight bytes, then restores
     -- the prior protection and flushes instruction cache. No code allocation.
     if protect(ffi.cast('void*', address), 8, 0x40, old_protection) == 0 then
         return false, 'VirtualProtect refused writable code access'
     end
+
     local previous = exchange(destination, new_word[0], old_word[0])
     local changed = previous == old_word[0]
     local coherent = flush(process, ffi.cast('const void*', address), 8) ~= 0
@@ -51,12 +54,15 @@ function M.swap(address, expected, replacement)
     if not restored then
         return changed, 'Failed to restore code-page protection'
     end
+
     if not coherent then
         return changed, 'FlushInstructionCache failed'
     end
+
     if not changed then
         return false, 'Code ownership mismatch; expected bytes were not overwritten'
     end
+
     return true
 end
 return M
